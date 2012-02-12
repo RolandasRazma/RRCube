@@ -49,7 +49,7 @@ public class RRDoor : MonoBehaviour {
 
 		_moveDirection = Vector3.back;
 		this.audio.PlayOneShot(this.openSounds);
-
+		
 		Messenger<RRDoor>.Broadcast(RRDoor.StateNotification, this);
 	}
 	

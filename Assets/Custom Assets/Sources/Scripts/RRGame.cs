@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public sealed class RRGame {
 	private static readonly RRGame _instance = new RRGame();
 	private static readonly string _cubePrefabPath = "Prefabs/Cube";
-	private static GameObject _player;
+	private static RRPlayer _player;
 	private bool _hasOpenDoors;
 	private HashSet<Vector3> _world = new HashSet<Vector3>();
 	
@@ -16,7 +16,7 @@ public sealed class RRGame {
 	
 	
 	private RRGame(){
-		_player = GameObject.FindGameObjectWithTag("Player");
+		_player = GameObject.FindGameObjectWithTag("Player").GetComponent<RRPlayer>();
 		
 		Messenger<RRDoor>.AddListener(RRDoor.StateNotification, DoorStateChanged);
 	}
@@ -24,7 +24,11 @@ public sealed class RRGame {
 	
 	private void DoorStateChanged(RRDoor door){
 		_hasOpenDoors = door.isOpen;
-
+		
+		if( door.isOpen ){
+			
+		}
+		
 		if( _hasOpenDoors == false ){
 			
 			RaycastHit hit;
@@ -36,7 +40,7 @@ public sealed class RRGame {
 				if ( parent.CompareTag("Cube") ) break;
 				parent = parent.parent;
 			}
-
+			
 			this.PlayerCube( parent.GetComponent<RRCube>() );
 			
 		}
@@ -94,7 +98,8 @@ public sealed class RRGame {
 				GameObject.Destroy(gameObject);
 			}
 		}
-
+		
+		_player.WorldPosition = playerCube.WorldPosition;
 	}
 		
 	
