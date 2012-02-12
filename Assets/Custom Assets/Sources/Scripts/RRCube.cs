@@ -16,7 +16,7 @@ public class RRCube : MonoBehaviour {
 	
 	private void Start() {
 		this.gameObject.tag = "Cube";
-		doorUp.Cube = doorDown.Cube = doorFront.Cube = doorBack.Cube = doorLeft.Cube = doorRight.Cube = this;
+		this.doorUp.Cube = this.doorDown.Cube = this.doorFront.Cube = this.doorBack.Cube = this.doorLeft.Cube = this.doorRight.Cube = this;
 		
 		this.doorUp.Direction	= new Vector3( 0, 1,  0);
 		this.doorDown.Direction	= new Vector3( 0,-1,  0);
