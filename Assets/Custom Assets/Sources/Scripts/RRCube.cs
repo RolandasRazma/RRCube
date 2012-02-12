@@ -22,6 +22,7 @@ public class RRCube : MonoBehaviour {
 	
 	public bool OpenDoor(RRDoor door){
 		if( RRGame.SharedInstance.HasOpenDoors ) {
+			door.gameObject.audio.PlayOneShot( door.lockedSounds );
 			// You can't open more than one door at a time
 			return false;
 		}

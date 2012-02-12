@@ -11,6 +11,7 @@ public class RRDoor : MonoBehaviour {
 	
 	public AudioClip openSounds;
 	public AudioClip closeSounds;
+	public AudioClip lockedSounds;
 	public static string StateNotification = "StateNotification";
 	
 	
