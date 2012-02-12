@@ -18,6 +18,10 @@ public sealed class RRGame {
 	private RRGame(){
 		_player = GameObject.FindGameObjectWithTag("Player").GetComponent<RRPlayer>();
 		
+		_world.Add(Vector3.zero);
+		
+		this.CalculatePlayerCube();
+		
 		Messenger<RRDoor>.AddListener(RRDoor.StateNotification, DoorStateChanged);
 	}
 	
@@ -30,25 +34,18 @@ public sealed class RRGame {
 		}
 		
 		if( _hasOpenDoors == false ){
-			
-			RaycastHit hit;
-			Physics.Raycast(_player.transform.position, Vector3.down, out hit);
-						
-			// TODO: i could save current and cube next door so wouldnt need check all cubes - just 2
-			Transform parent = hit.collider.transform.parent;
-			while( parent != null ) { 
-				if ( parent.CompareTag("Cube") ) break;
-				parent = parent.parent;
-			}
-			
-			this.PlayerCube( parent.GetComponent<RRCube>() );
-			
+			this.CalculatePlayerCube();
 		}
 	}
 	
 	
 	public bool HasOpenDoors {
 		get { return _hasOpenDoors; }
+	}
+	
+	
+	public RRPlayer Player {
+		get { return _player; }
 	}
 	
 	
@@ -82,6 +79,21 @@ public sealed class RRGame {
 			cube.doorLeft.gameObject.SetActiveRecursively(false);
 		}
 		
+	}
+	
+	
+	private void CalculatePlayerCube(){
+		RaycastHit hit;
+		Physics.Raycast(_player.transform.position, Vector3.down, out hit);
+					
+		// TODO: i could save current and cube next door so wouldnt need check all cubes - just 2
+		Transform parent = hit.collider.transform.parent;
+		while( parent != null ) { 
+			if ( parent.CompareTag("Cube") ) break;
+			parent = parent.parent;
+		}
+		
+		this.PlayerCube( parent.GetComponent<RRCube>() );
 	}
 	
 	

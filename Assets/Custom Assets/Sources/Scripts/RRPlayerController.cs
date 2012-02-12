@@ -24,13 +24,11 @@ public class RRPlayerController : MonoBehaviour {
 		_targetRect = new Rect(Screen.width /2 -1, Screen.height /2 -1, 2, 2);
 		
 		if( this.targetTexture ){
-//                    position = Rect( ( Screen.width - crosshairTexture.width ) / 2, ( Screen.height - crosshairTexture.height ) / 2, crosshairTexture.width, crosshairTexture.height );
-
 			GUI.DrawTexture(_targetRect, this.targetTexture, ScaleMode.StretchToFill, true);
 		}else{
 			GUI.Box(_targetRect, "");
 		}
-
+		
 	}
 	
 	
@@ -46,9 +44,13 @@ public class RRPlayerController : MonoBehaviour {
 				if( door ){
 					if( door.Cube ){
 						door.Cube.OpenDoor(door);
-					}else{
-						Debug.LogError("No cube asigned to door?");
 					}
+				}else{
+					//GameObject
+					GameObject gameObject = (GameObject)Resources.Load("Prefabs/Decal");
+					gameObject = (GameObject)GameObject.Instantiate(gameObject, hit.point +(hit.normal *0.01f), Quaternion.FromToRotation(Vector3.up, hit.normal));
+					
+					RRGame.SharedInstance.Player.Cube.WorldBound = true;
 				}
 				
 				// Debug
