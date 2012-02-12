@@ -2,12 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 public class RRPlayer : MonoBehaviour {
-	private Vector3		_worldPosition = Vector3.zero;
+	private RRCube  _cube;
 	
 	
-	public Vector3 WorldPosition {
-		set { _worldPosition = value; }
-		get { return _worldPosition;  }
+	public RRCube Cube {
+		set { _cube = value; }
+		get { return _cube;  }
 	}
 	
 }

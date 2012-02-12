@@ -5,6 +5,7 @@ using System.Collections;
 public class RRDoor : MonoBehaviour {
 	private Vector3 _moveDirection = Vector3.zero;
 	private Vector3 _defaultLocation;
+	private Vector3 _direction;
 	private RRCube  _cube;
 	private bool 	_open;
 	private bool	_locked;
@@ -44,13 +45,17 @@ public class RRDoor : MonoBehaviour {
 	}
 	
 	
-	public void Open() {
+	public bool Open() {
+		if( _open == true ) return false;
+		
 		_open = true;
 
 		_moveDirection = Vector3.back;
 		this.audio.PlayOneShot(this.openSounds);
 		
 		Messenger<RRDoor>.Broadcast(RRDoor.StateNotification, this);
+		
+		return true;
 	}
 	
 	
@@ -86,6 +91,12 @@ public class RRDoor : MonoBehaviour {
 	public bool Locked {
 		set { _locked = value; }
 		get { return _locked;  }
+	}
+	
+	
+	public Vector3 Direction {
+		set { _direction = value; }
+		get { return _direction;  }
 	}
 	
 }

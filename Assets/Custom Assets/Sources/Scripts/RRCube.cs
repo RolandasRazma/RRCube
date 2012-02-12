@@ -17,6 +17,13 @@ public class RRCube : MonoBehaviour {
 	private void Start() {
 		this.gameObject.tag = "Cube";
 		doorUp.Cube = doorDown.Cube = doorFront.Cube = doorBack.Cube = doorLeft.Cube = doorRight.Cube = this;
+		
+		this.doorUp.Direction	= new Vector3( 0, 1,  0);
+		this.doorDown.Direction	= new Vector3( 0,-1,  0);
+		this.doorFront.Direction= new Vector3(-1, 0,  0);
+		this.doorBack.Direction = new Vector3( 1, 0,  0);
+		this.doorRight.Direction= new Vector3( 0, 0,  1);
+		this.doorLeft.Direction = new Vector3( 0, 0, -1);
 	}
 	
 	
@@ -27,26 +34,7 @@ public class RRCube : MonoBehaviour {
 			return false;
 		}
 
-		Vector3 nextCubePosition = Vector3.zero;
-		if( this.doorUp == door ){
-			nextCubePosition.y++;
-		}else if( this.doorDown == door ){
-			nextCubePosition.y--;
-		}else if( this.doorFront == door ){
-			nextCubePosition.x--;
-		}else if( this.doorBack == door ){
-			nextCubePosition.x++;
-		}else if( this.doorRight == door ){
-			nextCubePosition.z++;
-		}else if( this.doorLeft == door ){
-			nextCubePosition.z--;
-		}
-		
-		RRGame.SharedInstance.SpawnCubeInDirection( nextCubePosition, this );
-		
-		door.Open();
-		
-		return true;
+		return door.Open();
 	} 
 	
 	

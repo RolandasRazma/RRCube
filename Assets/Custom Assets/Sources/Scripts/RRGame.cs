@@ -26,7 +26,7 @@ public sealed class RRGame {
 		_hasOpenDoors = door.isOpen;
 		
 		if( door.isOpen ){
-			
+			this.SpawnCubeInDirection( door.Direction, door.Cube );
 		}
 		
 		if( _hasOpenDoors == false ){
@@ -86,6 +86,8 @@ public sealed class RRGame {
 	
 	
 	private void PlayerCube( RRCube playerCube ){
+		_player.Cube = playerCube;
+		
 		GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
 	
 		playerCube.gameObject.SetActiveRecursively(true);
@@ -98,8 +100,6 @@ public sealed class RRGame {
 				GameObject.Destroy(gameObject);
 			}
 		}
-		
-		_player.WorldPosition = playerCube.WorldPosition;
 	}
 		
 	
