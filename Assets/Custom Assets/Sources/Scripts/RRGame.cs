@@ -57,7 +57,7 @@ public sealed class RRGame {
 		// Add to generated cubes list
 		_world.Add(worldPosition);
 		
-		// Todo - check if there is no cube created
+		// Create new Cube
 		GameObject newCube = (GameObject)Resources.Load(_cubePrefabPath);
 		newCube = (GameObject)GameObject.Instantiate(newCube, relativeToCube.transform.position +direction *12, relativeToCube.transform.rotation);
 		
