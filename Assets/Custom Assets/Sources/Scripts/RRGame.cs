@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 
 public sealed class RRGame {
@@ -6,6 +7,7 @@ public sealed class RRGame {
 	private static readonly string _cubePrefabPath = "Prefabs/Cube";
 	private static GameObject _player;
 	private bool _hasOpenDoors;
+	private HashSet<Vector3> _world = new HashSet<Vector3>();
 	
 	
 	public static RRGame SharedInstance {
@@ -14,8 +16,9 @@ public sealed class RRGame {
 	
 	
 	private RRGame(){
-		Messenger<RRDoor>.AddListener(RRDoor.StateNotification, DoorStateChanged);
 		_player = GameObject.FindGameObjectWithTag("Player");
+		
+		Messenger<RRDoor>.AddListener(RRDoor.StateNotification, DoorStateChanged);
 	}
 	
 	
@@ -27,6 +30,7 @@ public sealed class RRGame {
 			RaycastHit hit;
 			Physics.Raycast(_player.transform.position, Vector3.down, out hit);
 						
+			// TODO: i could save current and cube next door so wouldnt need check all cubes - just 2
 			Transform parent = hit.collider.transform.parent;
 			while( parent != null ) { 
 				if ( parent.CompareTag("Cube") ) break;
@@ -45,16 +49,22 @@ public sealed class RRGame {
 	
 	
 	public void SpawnCubeInDirection( Vector3 direction, RRCube relativeToCube ){
+		Vector3 worldPosition = relativeToCube.WorldPosition +direction;
+		
+		// Did we generated this cube before?
+		if( _world.Contains(worldPosition) ) return;
+
+		// Add to generated cubes list
+		_world.Add(worldPosition);
 		
 		// Todo - check if there is no cube created
 		GameObject newCube = (GameObject)Resources.Load(_cubePrefabPath);
 		newCube = (GameObject)GameObject.Instantiate(newCube, relativeToCube.transform.position +direction *12, relativeToCube.transform.rotation);
 		
 		RRCube cube = newCube.GetComponent<RRCube>();
-		cube.WorldPosition = relativeToCube.WorldPosition +direction;
-		
+		cube.WorldPosition = worldPosition;
+
 		if( direction.y < 0 ){
-			
 			cube.doorUp.gameObject.SetActiveRecursively(false);
 		}else if( direction.y > 0 ){
 			cube.doorDown.gameObject.SetActiveRecursively(false);
@@ -77,9 +87,11 @@ public sealed class RRGame {
 		playerCube.gameObject.SetActiveRecursively(true);
 		
 		// Destroy other cubes
-		foreach( GameObject cube in cubes ){
-			if( cube != playerCube.gameObject ){
-				GameObject.Destroy(cube);
+		foreach( GameObject gameObject in cubes ){
+			RRCube cube = gameObject.GetComponent<RRCube>();
+			if( gameObject != playerCube.gameObject && cube.WorldBound == false ){
+				_world.Remove(cube.WorldPosition);
+				GameObject.Destroy(gameObject);
 			}
 		}
 

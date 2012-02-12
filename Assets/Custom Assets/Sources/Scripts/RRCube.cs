@@ -1,8 +1,10 @@
 using UnityEngine;
 using System.Collections;
 
+
 public class RRCube : MonoBehaviour {
-	private Vector3	  _worldPosition = Vector3.zero;
+	private Vector3		_worldPosition = Vector3.zero;
+	private bool		_worldBound;
 	
 	public RRDoor doorUp;
 	public RRDoor doorDown;
@@ -52,5 +54,11 @@ public class RRCube : MonoBehaviour {
 		get { return _worldPosition;  }
 	}
 		
+	
+	public bool WorldBound {
+		set {_worldBound = value; }
+		get { return _worldBound; }
+	}
+	
 	
 }
