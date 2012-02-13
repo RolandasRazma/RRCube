@@ -45,11 +45,13 @@ public class RRPlayerController : MonoBehaviour {
 					if( door.Cube ){
 						door.Cube.OpenDoor(door);
 					}
-				}else{
+				}else if( !RRGame.SharedInstance.HasOpenDoors ){
 					//GameObject
 					GameObject gameObject = (GameObject)Resources.Load("Prefabs/Decal");
-					gameObject = (GameObject)GameObject.Instantiate(gameObject, hit.point +(hit.normal *0.01f), Quaternion.FromToRotation(Vector3.up, hit.normal));
 					
+					RRDecals.PlaceDecal(gameObject, hit);
+					
+					// To allow placing decals with open doors this should be changed
 					RRGame.SharedInstance.Player.Cube.WorldBound = true;
 				}
 				
