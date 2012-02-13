@@ -1,8 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
-public static class RRDecals {
-
+public static class RRDecal {
+	
+	// TODO: This is fuckedup and tottaly hacked. Need to come back later and remake it (when i will learn more about Unity3D)
 	public static void PlaceDecal( GameObject gameObject, RaycastHit hit ){
 		// This one works for cube - Quaternion.LookRotation(hit.normal)
 		// This one DON'T work for cube - Quaternion.FromToRotation(Vector3.back, hit.normal)
