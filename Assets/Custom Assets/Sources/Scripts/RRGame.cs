@@ -9,7 +9,7 @@ public sealed class RRGame {
 	private bool _hasOpenDoors;
 	private HashSet<Vector3> _world = new HashSet<Vector3>();
 	
-	
+
 	public static RRGame SharedInstance {
 		get { return _instance; }
 	}

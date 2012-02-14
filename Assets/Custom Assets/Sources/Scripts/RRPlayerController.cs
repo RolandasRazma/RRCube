@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 
+[RequireComponent( typeof(CharacterController) )]
 public class RRPlayerController : MonoBehaviour {
 	private Rect _targetRect;
 	private bool _onLadder;
@@ -46,11 +47,8 @@ public class RRPlayerController : MonoBehaviour {
 						door.Cube.OpenDoor(door);
 					}
 				}else if( !RRGame.SharedInstance.HasOpenDoors ){
-					//GameObject
-					GameObject gameObject = (GameObject)Resources.Load("Prefabs/Decal");
-					
-					RRDecal.PlaceDecal(gameObject, hit);
-					
+					Decals.CreateDecal(ray, (Material)Resources.Load("Materials/TEST")); 
+
 					// To allow placing decals with open doors this should be changed
 					RRGame.SharedInstance.Player.Cube.WorldBound = true;
 				}
