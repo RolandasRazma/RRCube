@@ -7,8 +7,7 @@ public sealed class RRGame {
 	private static readonly string _cubePrefabPath = "Prefabs/Cube";
 	private static RRPlayer _player;
 	private bool _hasOpenDoors;
-	private HashSet<Vector3> _world = new HashSet<Vector3>();
-	
+	private Dictionary<Vector3, RRCube> _world = new Dictionary<Vector3, RRCube>();
 
 	public static RRGame SharedInstance {
 		get { return _instance; }
@@ -17,11 +16,11 @@ public sealed class RRGame {
 	
 	private RRGame(){
 		_player = GameObject.FindGameObjectWithTag("Player").GetComponent<RRPlayer>();
-		
-		_world.Add(Vector3.zero);
-		
+
 		this.CalculatePlayerCube();
 		
+		_world.Add(_player.Cube.WorldPosition, _player.Cube);
+
 		Messenger<RRDoor>.AddListener(RRDoor.StateNotification, DoorStateChanged);
 	}
 	
@@ -53,16 +52,22 @@ public sealed class RRGame {
 		Vector3 worldPosition = relativeToCube.WorldPosition +direction;
 		
 		// Did we generated this cube before?
-		if( _world.Contains(worldPosition) ) return;
+		// if( _world.ContainsKey(worldPosition) ) return;
+		
+		RRCube cube;
+		if( !(cube = this.CubeAtWorldPosition( worldPosition )) ){
+			// Create new Cube
+			GameObject newCube;
+		
+			newCube = (GameObject)Resources.Load(_cubePrefabPath);
+			newCube = (GameObject)GameObject.Instantiate(newCube, relativeToCube.transform.position +direction *12, relativeToCube.transform.rotation);
+		
+			cube = newCube.GetComponent<RRCube>();
+			
+			// Add to generated cubes list
+			_world.Add(worldPosition, cube);
+		}
 
-		// Add to generated cubes list
-		_world.Add(worldPosition);
-		
-		// Create new Cube
-		GameObject newCube = (GameObject)Resources.Load(_cubePrefabPath);
-		newCube = (GameObject)GameObject.Instantiate(newCube, relativeToCube.transform.position +direction *12, relativeToCube.transform.rotation);
-		
-		RRCube cube = newCube.GetComponent<RRCube>();
 		cube.WorldPosition = worldPosition;
 
 		if( direction.y < 0 ){
@@ -78,7 +83,6 @@ public sealed class RRGame {
 		}else if( direction.z > 0 ){
 			cube.doorLeft.gameObject.SetActiveRecursively(false);
 		}
-		
 	}
 	
 	
@@ -91,7 +95,7 @@ public sealed class RRGame {
 		while( parent != null ) { 
 			if ( parent.CompareTag("Cube") ) break;
 			parent = parent.parent;
-		}
+		}	
 		
 		this.PlayerCube( parent.GetComponent<RRCube>() );
 	}
@@ -103,7 +107,7 @@ public sealed class RRGame {
 		GameObject[] cubes = GameObject.FindGameObjectsWithTag("Cube");
 	
 		playerCube.gameObject.SetActiveRecursively(true);
-		
+
 		// Destroy other cubes
 		foreach( GameObject gameObject in cubes ){
 			RRCube cube = gameObject.GetComponent<RRCube>();
@@ -114,5 +118,10 @@ public sealed class RRGame {
 		}
 	}
 		
+	
+	private RRCube CubeAtWorldPosition( Vector3 worldPosition ){
+		return (_world.ContainsKey( worldPosition )?_world[worldPosition]:null);
+	}
+	
 	
 }
