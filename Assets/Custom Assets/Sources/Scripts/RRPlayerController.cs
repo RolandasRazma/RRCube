@@ -47,8 +47,9 @@ public class RRPlayerController : MonoBehaviour {
 						door.Cube.OpenDoor(door);
 					}
 				}else if( !RRGame.SharedInstance.HasOpenDoors ){
-					Decals.CreateDecal(ray, (Material)Resources.Load("Materials/TEST")); 
-
+					// Place decal
+					RRDecal.PlaceDecal((Texture)Resources.Load("Textures/IWasHere"), hit);
+					
 					// To allow placing decals with open doors this should be changed
 					RRGame.SharedInstance.Player.Cube.WorldBound = true;
 				}
