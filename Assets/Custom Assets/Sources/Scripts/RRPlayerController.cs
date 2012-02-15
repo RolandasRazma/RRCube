@@ -46,14 +46,17 @@ public class RRPlayerController : MonoBehaviour {
 					if( door.Cube ){
 						door.Cube.OpenDoor(door);
 					}
+				}else if( hit.collider.name == "Decal" ) {
+					// Hit Decal - edit?
 				}else{
 					// Place decal
-					RRDecal.PlaceDecal((Texture)Resources.Load("Textures/IWasHere"), hit);
+					GameObject decal = RRDecal.PlaceDecal((Texture)Resources.Load("Textures/IWasHere"), hit);
+					decal.AddComponent(typeof(BoxCollider));
 					
 					// Disable cube destroying
 					hit.collider.FindParentWithTag("Cube").GetComponent<RRCube>().WorldBound = true;
 				}
-				
+
 			}
 		}
 		
