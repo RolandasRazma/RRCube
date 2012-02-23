@@ -56,7 +56,7 @@ public class RRPlayerController : MonoBehaviour {
 					// Disable cube destroying
 					hit.collider.FindParentWithTag("Cube").GetComponent<RRCube>().WorldBound = true;
 				}
-
+			
 			}
 		}
 		

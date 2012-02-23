@@ -39,7 +39,10 @@ public class RRCube : MonoBehaviour {
 	
 	
 	public Vector3 WorldPosition {
-		set { _worldPosition = value; }
+		set { 
+			_worldPosition = value; 
+			this.transform.position = value *12;
+		}
 		get { return _worldPosition;  }
 	}
 		
